@@ -14,7 +14,7 @@ MONGO_DB = "unifor"
 MONGO_COLLECTION = "dataops_dados"
 
 # ====== CONFIGURAÇÃO API FASTAPI ======
-API_URL = "http://host.docker.internal:8000/vendas"  # para acessar serviço da FastAPI via Docker
+API_URL = "http://host.docker.internal:8000/vendas"
 
 # ====== FUNÇÃO PARA OBTER DADOS DO MONGODB ======
 @st.cache_data(ttl=60)  # atualiza a cada 60 segundos
@@ -51,10 +51,22 @@ def consultar_endpoint(endpoint):
 col1, col2, col3 = st.columns(3)
 
 if col1.button("📍 Vendas por Modalidade"):
-    st.json(consultar_endpoint("modalidade"))
+    resultado = consultar_endpoint("modalidade")
+    if isinstance(resultado, list):
+        st.dataframe(resultado)
+    else:
+        st.json(resultado)
 
 if col2.button("🌆 Vendas por Cidade"):
-    st.json(consultar_endpoint("cidade"))
+    resultado = consultar_endpoint("cidade")
+    if isinstance(resultado, list):
+        st.dataframe(resultado)
+    else:
+        st.json(resultado)
 
 if col3.button("📅 Vendas por Ano/Mês"):
-    st.json(consultar_endpoint("ano-mes"))
+    resultado = consultar_endpoint("ano-mes")
+    if isinstance(resultado, list):
+        st.dataframe(resultado)
+    else:
+        st.json(resultado)

@@ -1,6 +1,8 @@
 # 🚀 **Projeto DataOps Unifor**
 
-O **Projeto DataOps Unifor** é uma projeto de engenharia de dados que orquestra pipelines de dados, realiza transformações de forma sequencial e oferece visualizações dinâmicas e interativas. O projeto integra várias tecnologias para criar um fluxo de trabalho completo e automatizado de dados.
+![Docker](https://img.shields.io/badge/Docker-orange) ![Airflow](https://img.shields.io/badge/Airflow-blue) ![Airflow](https://img.shields.io/badge/MongoDB-green) ![Poetry](https://img.shields.io/badge/Poetry-yellow) ![Postgres](https://img.shields.io/badge/Postgres-blue) ![FastAPI](https://img.shields.io/badge/FastAPI-purple.svg) ![Streamlit](https://img.shields.io/badge/Streamlit-red.svg)
+
+O **Projeto DataOps Unifor** é um projeto de engenharia de dados que orquestra pipelines de dados, realiza transformações de forma sequencial e oferece visualizações dinâmicas e interativas. O projeto integra várias tecnologias para criar um fluxo de trabalho completo e automatizado de dados.
 
 ## 🎯 **Objetivo do Projeto**
 
@@ -20,7 +22,7 @@ De forma geral, o objetivo principal é automatizar o fluxo de dados através de
 
 ---
 
-## 🛠 **Tecnologias Utilizadas**
+## 🛠 **Tecnologias e Ferramentas**
 
 Este projeto utiliza um conjunto robusto de tecnologias para garantir a automação, escalabilidade e facilidade de uso:
 
@@ -35,7 +37,7 @@ Este projeto utiliza um conjunto robusto de tecnologias para garantir a automaç
 
 ---
 
-## 🗂 **Estrutura do Projeto**
+## 🗂 **Organização da Estrutura do Projeto**
 
 A estrutura do projeto foi organizada para ser intuitiva e modular, facilitando a navegação e o desenvolvimento.
 
@@ -110,6 +112,14 @@ Os DAGs podem ser visualizados e executados através da interface web do Airflow
 * **dag\_vendas\_estado.py**: Processamento de vendas por estado.
 * **dag\_vendas\_modalidade.py**: Processamento de vendas por modalidade.
 
+### 5. **Interagir com o painel Streamlit**
+
+O painel Streamlit possui 3 botões que interagem diretamente com as rotas disponíveis da API:
+
+* **Vendas por Modalidade**: Informação agrupada de vendas por modalidade de pagamento.
+* **Vendas por Cidade**: Informação agrupada de vendas por cidade.
+* **Vendas por Ano/Mês**: Informação agrupada de vendas por ano/mês.
+
 ---
 
 ## ⚙ **Estrutura do `docker-compose.yaml`**
@@ -125,13 +135,11 @@ Este arquivo orquestra os serviços Docker. Ele inclui:
 
 ## 🧪 **Como Testar**
 
-O projeto inclui testes automatizados para garantir a qualidade do código. Para rodá-los, basta utilizar o comando:
+O projeto inclui testes automatizados. Atualmente, os testes cobrem a API **FastAPI** e podem ser executados com:
 
 ```bash
 python tests/test_api.py
 ```
-
-O arquivo `test_api.py` contém testes para garantir que a API **FastAPI** está funcionando corretamente.
 
 ---
 
