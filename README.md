@@ -66,8 +66,8 @@ Certifique-se de que o **Docker** e o **Docker Compose** estão instalados. Se n
 Clone o repositório e instale as dependências com o **Poetry**:
 
 ```bash
-git clone https://github.com/seu-usuario/dataops_unifor.git
-cd dataops_unifor
+git clone https://github.com/felipealvss/projeto_dataops.git
+cd projeto_dataops
 poetry install
 ```
 
