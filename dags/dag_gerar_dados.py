@@ -9,7 +9,7 @@ MONGO_URI = "mongodb+srv://felipe:123@unifor.o7sppxt.mongodb.net/?retryWrites=tr
 MONGO_DB = "unifor"
 MONGO_COLLECTION = "dataops_dados"
 
-# Função para gerar um registro de venda aleatório
+# Função para gerar um registro de vendas
 def gerar_venda():
     modelos_motos = ["Yamaha MT-07", "Honda CB 500X", "Kawasaki Ninja 400", "Suzuki GSX-S750", "BMW F 800 GS"]
     modalidades = ["Consócio", "Financiamento", "À vista"]
@@ -37,7 +37,6 @@ def gerar_venda():
         "modalidade": modalidade
     }
 
-# Função que será chamada pela DAG
 def gerar_registros(**context):
     try:
         registros = [gerar_venda() for _ in range(2)]
@@ -49,7 +48,6 @@ def gerar_registros(**context):
         print(f"Erro ao inserir dados no MongoDB: {e}")
         raise
 
-# Definição da DAG
 dag = DAG(
     dag_id="generate_data_mongo",
     start_date=datetime(2025, 1, 1),
@@ -58,12 +56,10 @@ dag = DAG(
     tags=["dataops"]
 )
 
-# Tarefa PythonOperator
 gerar_dados_task = PythonOperator(
     task_id="gerar_dados_mongodb",
     python_callable=gerar_registros,
     dag=dag
 )
 
-# Definindo a ordem de execução
 gerar_dados_task

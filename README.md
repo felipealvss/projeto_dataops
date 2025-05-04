@@ -1,14 +1,22 @@
 # 🚀 **Projeto DataOps Unifor**
 
-**DataOps Unifor** é uma solução de engenharia de dados de ponta, que orquestra pipelines de dados, realiza transformações em tempo real e oferece visualizações dinâmicas e interativas. O projeto integra várias tecnologias inovadoras para criar um fluxo de trabalho completo e automatizado de dados.
+O **Projeto DataOps Unifor** é uma projeto de engenharia de dados que orquestra pipelines de dados, realiza transformações de forma sequencial e oferece visualizações dinâmicas e interativas. O projeto integra várias tecnologias para criar um fluxo de trabalho completo e automatizado de dados.
 
 ## 🎯 **Objetivo do Projeto**
 
-O objetivo principal é automatizar o fluxo de dados através de pipelines orquestrados pelo **Apache Airflow**, utilizando containers **Docker** para isolar os serviços e garantir escalabilidade e eficiência. A solução final inclui:
+De forma geral, o objetivo principal é automatizar o fluxo de dados através de pipelines orquestrados pelo **Apache Airflow** e utilizando containers **Docker** para isolar os serviços e garantir escalabilidade e eficiência. A solução final inclui:
 
 * **Orquestração de Dados**: Gerenciamento de pipelines e execução automática de tarefas.
-* **Transformações em Tempo Real**: Processamento de dados à medida que chegam.
-* **Visualização de Dados**: Dashboards interativos para insights rápidos e fáceis.
+* **Transformações em Tempo Agendado**: Processamento de dados em forma de tarefas agendadas.
+* **Visualização de Dados**: Dashboards interativos para monitoramentos e insights rápidos.
+
+---
+
+## 📋 **Diagrama do projeto**
+
+- **Diagrama de alto nível explicando o desenho das integrações entre as tecnologias:**
+
+    <img src="docs/images/Diagrama02MermaidChart-2025-05-04.png" alt="Fluxo do projeto"/>
 
 ---
 
@@ -16,13 +24,13 @@ O objetivo principal é automatizar o fluxo de dados através de pipelines orque
 
 Este projeto utiliza um conjunto robusto de tecnologias para garantir a automação, escalabilidade e facilidade de uso:
 
-* **Apache Airflow**: Orquestração de workflows e agendamento de tarefas.
 * **Docker**: Containerização dos serviços para maior flexibilidade e isolamento.
-* **PostgreSQL**: Banco de dados relacional para persistência de dados estruturados.
+* **Apache Airflow**: Orquestração de workflows e agendamento de tarefas.
 * **MongoDB Atlas**: Banco de dados NoSQL para dados não estruturados.
+* **PostgreSQL**: Banco de dados relacional para persistência de dados estruturados.
 * **FastAPI**: Framework rápido e moderno para a construção de APIs RESTful.
 * **Streamlit**: Framework para criação de dashboards interativos.
-* **Redis**: Sistema de gerenciamento de cache e filas.
+* **Redis**: Sistema de gerenciamento de cache e filas no Airflow.
 * **Poetry**: Gerenciamento eficiente de dependências Python.
 
 ---
@@ -41,18 +49,18 @@ A estrutura do projeto foi organizada para ser intuitiva e modular, facilitando 
 │   └── dag_vendas_modalidade.py # Processamento de vendas por modalidade
 ├── dataops_unifor               # Módulo principal
 ├── docker                       # Configurações Docker para FastAPI e Streamlit
-├── docker-compose.yaml          # Orquestração dos containers
 ├── docs                         # Documentação adicional
-├── dump                         # Dumps de banco de dados
 ├── logs                         # Logs do Airflow
 ├── plugins                      # Plugins customizados do Airflow
-├── poetry.lock                  # Bloqueio de dependências
-├── pyproject.toml               # Configuração do Poetry
-├── README.md                    # Este arquivo
 ├── src                          # Código-fonte do projeto
 │   ├── fastapi_app              # Aplicação FastAPI
 │   └── streamlit_dashboard      # Dashboard Streamlit
 └── tests                        # Testes do projeto
+└── .env                         # Configurações de variáveis de ambiente
+├── docker-compose.yaml          # Orquestração dos containers
+├── poetry.lock                  # Bloqueio de dependências
+├── pyproject.toml               # Configuração do Poetry
+└── README.md                    # Este arquivo
 ```
 
 ---
@@ -68,7 +76,7 @@ Clone o repositório e instale as dependências com o **Poetry**:
 ```bash
 git clone https://github.com/felipealvss/projeto_dataops.git
 cd projeto_dataops
-poetry install
+poetry install --no-root
 ```
 
 ### 2. **Subir os Containers Docker**

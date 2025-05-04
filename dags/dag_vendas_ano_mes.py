@@ -11,22 +11,22 @@ MONGO_URI = "mongodb+srv://felipe:123@unifor.o7sppxt.mongodb.net/?retryWrites=tr
 MONGO_DB = "unifor"
 MONGO_COLLECTION = "dataops_dados"
 
-# Configurações do PostgreSQL diretamente no código
-POSTGRES_HOST = "postgres"  # Endereço do seu contêiner do PostgreSQL (local ou outro host)
-POSTGRES_PORT = "5432"      # A porta padrão do PostgreSQL
-POSTGRES_USER = "airflow"   # Usuário do PostgreSQL
-POSTGRES_PASSWORD = "airflow"  # Senha do PostgreSQL
-POSTGRES_DB = "airflow"  # Banco de dados
+# Configurações do PostgreSQL
+POSTGRES_HOST = "postgres"
+POSTGRES_PORT = "5432"
+POSTGRES_USER = "airflow"
+POSTGRES_PASSWORD = "airflow"
+POSTGRES_DB = "airflow"
 
-POSTGRES_TABLE = "vendas_por_ano_mes"  # Novo nome da tabela
+POSTGRES_TABLE = "vendas_por_ano_mes"
 
 # Função para consultar dados do MongoDB e agrupar por ano e mês
 def consultar_e_agrupar_vendas_por_ano_mes(**context):
     try:
-        # Conectar ao MongoDB
+
         client = MongoClient(MONGO_URI)
         collection = client[MONGO_DB][MONGO_COLLECTION]
-        
+
         # Consultar todos os dados
         pipeline = [
             {
@@ -51,34 +51,33 @@ def consultar_e_agrupar_vendas_por_ano_mes(**context):
         
         resultado = list(collection.aggregate(pipeline))
         if resultado:
-            # Transformar o resultado em um DataFrame
+
             df = pd.DataFrame(resultado)
-            # Ajustar o formato para o PostgreSQL
+
             df = df.rename(columns={
                 "_id": "ano_mes",
                 "total_vendas": "total_vendas",
                 "total_faturado": "total_faturado",
                 "quantidade_motos_vendidas": "quantidade_motos_vendidas"
             })
-            
+
             # Retornar os dados como uma lista de dicionários (formato serializável)
             return json.dumps(df.to_dict(orient="records"))  # Converte para lista de dicionários e serializa como JSON
         else:
             raise Exception("Nenhum dado encontrado.")
-    
+
     except Exception as e:
         print(f"Erro ao consultar ou agrupar dados do MongoDB: {e}")
         raise
 
-# Função para inserir os dados agrupados no PostgreSQL
 def inserir_dados_no_postgres(df, **context):
     try:
-        # Desserializar os dados do XCom (converter de volta para lista de dicionários)
+
         df = json.loads(df)  # Desserializa o JSON de volta para a lista de dicionários
         
         # Verificar se df é uma lista de dicionários antes de tentar convertê-la em um DataFrame
         if isinstance(df, list) and all(isinstance(item, dict) for item in df):
-            # Converte a lista de dicionários em DataFrame
+
             df = pd.DataFrame(df)
         else:
             raise ValueError(f"O tipo de 'df' não é uma lista de dicionários. Tipo atual: {type(df)}")
@@ -92,8 +91,7 @@ def inserir_dados_no_postgres(df, **context):
             dbname=POSTGRES_DB
         )
         cursor = conn.cursor()
-        
-        # Verificar se a tabela existe e criar, caso não exista
+
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS vendas_por_ano_mes (
                 ano_mes VARCHAR(7),  -- No formato YYYY-MM
@@ -103,10 +101,8 @@ def inserir_dados_no_postgres(df, **context):
             );
         """)
 
-        # Truncar a tabela antes de inserir novos dados
         cursor.execute(f"TRUNCATE TABLE {POSTGRES_TABLE};")
 
-        # Inserir os dados no PostgreSQL
         for _, row in df.iterrows():
             cursor.execute("""
                 INSERT INTO vendas_por_ano_mes (ano_mes, total_vendas, total_faturado, quantidade_motos_vendidas)
@@ -122,7 +118,6 @@ def inserir_dados_no_postgres(df, **context):
         print(f"Erro ao inserir dados no PostgreSQL: {e}")
         raise
 
-# Definição da DAG
 dag = DAG(
     dag_id="vendas_por_ano_mes",
     start_date=datetime(2025, 1, 1),
@@ -131,7 +126,6 @@ dag = DAG(
     tags=["dataops"]
 )
 
-# Tarefa para consultar e agrupar dados do MongoDB por ano e mês
 consultar_e_agrupar_task = PythonOperator(
     task_id="consultar_e_agrupar_vendas_por_ano_mes",
     python_callable=consultar_e_agrupar_vendas_por_ano_mes,
@@ -139,7 +133,6 @@ consultar_e_agrupar_task = PythonOperator(
     dag=dag
 )
 
-# Tarefa para inserir os dados no PostgreSQL
 inserir_dados_task = PythonOperator(
     task_id="inserir_dados_postgres",
     python_callable=inserir_dados_no_postgres,
@@ -148,5 +141,4 @@ inserir_dados_task = PythonOperator(
     dag=dag
 )
 
-# Definindo a ordem de execução
 consultar_e_agrupar_task >> inserir_dados_task
