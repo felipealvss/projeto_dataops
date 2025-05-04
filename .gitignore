@@ -1,0 +1,62 @@
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__
+*.pdb
+*.egg
+*.egg-info
+dist
+build
+*.log
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Poetry
+poetry.lock
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# Virtualenv
+venv/
+env/
+env.bak/
+venv.bak/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# Logs
+logs/
+*.log
+
+# Airflow
+dags/__pycache__/
+dags/*.pyc
+dags/*.pyo
+dags/*.pyd
+
+# Docker-compose
+docker-compose.yml
+docker-compose.override.yml
+
+# FastAPI and Streamlit
+src/fastapi_app/__pycache__/
+src/streamlit_dashboard/__pycache__/
+
+# Databases
+*.db
+*.sqlite
+dump/
+
+# Miscellaneous
+*.swp
+*.swo
+
+dump/
