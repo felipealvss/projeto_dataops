@@ -2,7 +2,9 @@ import streamlit as st
 import requests
 import pymongo
 from datetime import datetime
-import time
+import pytz
+
+fuso_local = pytz.timezone("America/Fortaleza")
 
 # ====== CONFIGURAÇÕES GERAIS ======
 st.set_page_config(page_title="Monitoramento API de Vendas - (Z111) DataOPS Unifor", layout="wide")
@@ -24,7 +26,7 @@ def get_mongo_stats():
     collection = db[MONGO_COLLECTION]
     total = collection.count_documents({})
     last_doc = collection.find_one(sort=[("_id", -1)])
-    last_updated = last_doc["timestamp"] if last_doc and "timestamp" in last_doc else datetime.utcnow()
+    last_updated = last_doc["timestamp"].astimezone(fuso_local) if last_doc and "timestamp" in last_doc else datetime.now(fuso_local)
     return total, last_updated
 
 # ====== EXIBIÇÃO DE DADOS DO MONGO ======
