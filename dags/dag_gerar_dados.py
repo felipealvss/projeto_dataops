@@ -39,7 +39,7 @@ def gerar_venda():
 
 def gerar_registros(**context):
     try:
-        registros = [gerar_venda() for _ in range(2)]
+        registros = [gerar_venda() for _ in range(5)]
         client = MongoClient(MONGO_URI)
         collection = client[MONGO_DB][MONGO_COLLECTION]
         collection.insert_many(registros)
