@@ -196,7 +196,8 @@ services:
     networks:
       - dataops_net
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
   streamlit:
     image: python:3.10.12
@@ -217,7 +218,8 @@ services:
     networks:
       - dataops_net
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
 volumes:
   postgres-db-volume:
