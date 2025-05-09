@@ -31,6 +31,6 @@ Ele pode ser considerado um microserviço porque:
 ## 📈 Relação com outros Componentes
 
 
-<img src="docs/images/FastAPIMermaidChart-2025-05-05-05.png" alt="Microserviço"/>
+<img src="images/FastAPIMermaidChart-2025-05-05-05.png" alt="Microserviço"/>
 
 ---
