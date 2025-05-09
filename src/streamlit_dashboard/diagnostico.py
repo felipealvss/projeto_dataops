@@ -46,12 +46,9 @@ def check_postgres_status():
 def checar_airflow():
     try:
         response = requests.get("http://host.docker.internal:8080/health", timeout=2)
-        if response.status_code == 200:
-            return "🟢 OK"
-        else:
-            return "🟡 Parcial"
+        return "🟢 OK" if response.status_code == 200 else "🟡 Parcial"
     except:
-        return "🔴 Offline"
+        return "🔴 Falha"
 
 # Informações da DAG
 def obter_info_dag(dag_id="generate_data_mongo"):
@@ -85,7 +82,7 @@ def obter_info_dag(dag_id="generate_data_mongo"):
 
 # Página Diagnóstico
 def pagina_diagnostico():
-    st.subheader("🛠 Diagnóstico do Sistema")
+    st.subheader("🚦 Diagnóstico do Ambiente")
 
     col1, col2, col3, col4 = st.columns(4)
     col1.metric("MongoDB Atlas", check_mongo_status())
