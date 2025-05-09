@@ -33,9 +33,15 @@ def get_mongo_stats():
 st.subheader("📦 Dados MongoDB (Gerados pela DAG)")
 total, last_updated = get_mongo_stats()
 
-col1, col2 = st.columns(2)
+col1, col2, col3 = st.columns([1, 1, 1])
 col1.metric("Total de registros", total)
 col2.metric("Última atualização", last_updated.strftime("%d/%m/%Y %H:%M:%S"))
+
+# 👉 Botão de atualização manual ao lado direito
+with col3:
+    if st.button("🔄 Atualizar agora"):
+        st.cache_data.clear()
+        st.rerun()
 
 st.divider()
 
