@@ -3,11 +3,14 @@ from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 from pymongo import MongoClient
 import random
+import logging
 
 # Configurações do MongoDB Atlas
 MONGO_URI = "mongodb+srv://felipe:123@unifor.o7sppxt.mongodb.net/?retryWrites=true&w=majority&appName=unifor"
 MONGO_DB = "unifor"
 MONGO_COLLECTION = "dataops_dados"
+
+logger = logging.getLogger(__name__)
 
 # Função para gerar um registro de vendas
 def gerar_venda():
@@ -43,9 +46,9 @@ def gerar_registros(**context):
         client = MongoClient(MONGO_URI)
         collection = client[MONGO_DB][MONGO_COLLECTION]
         collection.insert_many(registros)
-        print(f"{len(registros)} registros inseridos com sucesso.")
+        logger.info(f"{len(registros)} registros inseridos com sucesso.")
     except Exception as e:
-        print(f"Erro ao inserir dados no MongoDB: {e}")
+        logger.error(f"Erro ao inserir dados no MongoDB: {e}")
         raise
 
 dag = DAG(

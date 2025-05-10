@@ -1,6 +1,6 @@
 # 🚀 **Projeto DataOps Unifor**
 
-![Docker](https://img.shields.io/badge/Docker-orange) ![Airflow](https://img.shields.io/badge/Airflow-blue) ![Airflow](https://img.shields.io/badge/MongoDB-green) ![Poetry](https://img.shields.io/badge/Poetry-yellow) ![Postgres](https://img.shields.io/badge/Postgres-blue) ![FastAPI](https://img.shields.io/badge/FastAPI-purple.svg) ![Streamlit](https://img.shields.io/badge/Streamlit-red.svg)
+![Docker](https://img.shields.io/badge/Docker-blue) ![Airflow](https://img.shields.io/badge/Airflow-2.10.5-blue) ![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green) ![Poetry](https://img.shields.io/badge/Poetry-1.7.1-yellow) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-13-blue) ![FastAPI](https://img.shields.io/badge/FastAPI-uvicorn-teal) ![Streamlit](https://img.shields.io/badge/Streamlit-1.34.0-red)
 
 O **Projeto DataOps Unifor** é um projeto de engenharia de dados que orquestra pipelines de dados, realiza transformações de forma sequencial e oferece visualizações dinâmicas e interativas. O projeto integra várias tecnologias para criar um fluxo de trabalho completo e automatizado de dados.
 
@@ -45,10 +45,13 @@ A estrutura do projeto foi organizada para ser intuitiva e modular, facilitando 
 .
 ├── config                       # Arquivos de configuração do Airflow
 ├── dags                         # DAGs do Airflow para orquestração
-│   ├── dag_gerar_dados.py       # Geração de dados
-│   ├── dag_vendas_ano_mes.py    # Processamento de vendas por ano e mês
-│   ├── dag_vendas_estado.py     # Processamento de vendas por estado
-│   └── dag_vendas_modalidade.py # Processamento de vendas por modalidade
+│   ├── dag_carregar_dados.py    # Carga de dados dos arquivos CSV para PostgreSQL
+│   ├── dag_extrair_dados.py     # Extração dos dados do MongoDB Atlas para arquivo JSON
+│   ├── dag_gerar_dados.py       # Geração de dados para o MongoDB Atlas
+│   └── dag_transformar_dados.py # Transformação dos dados do arquivo JSON para arquivos CSV
+├── data                         # Diretório de armazenamento de dados locais
+│   ├── extract                  # Diretório que armazena dados do MongoDB Atlas para arquivo JSON
+│   └── transform                # Diretório que armazena dados do arquivo JSON para arquivos CSV
 ├── dataops_unifor               # Módulo principal
 ├── docker                       # Configurações Docker para FastAPI e Streamlit
 ├── docs                         # Documentação adicional
@@ -56,6 +59,7 @@ A estrutura do projeto foi organizada para ser intuitiva e modular, facilitando 
 ├── plugins                      # Plugins customizados do Airflow
 ├── src                          # Código-fonte do projeto
 │   ├── fastapi_app              # Aplicação FastAPI
+│   ├── python                   # Scripts de transformação, extração e carga usados pelas DAGs
 │   └── streamlit_dashboard      # Dashboard Streamlit
 └── tests                        # Testes do projeto
 └── .env                         # Configurações de variáveis de ambiente
@@ -105,12 +109,12 @@ Isso irá iniciar os seguintes serviços:
 
 ### 4. **Executar os DAGs**
 
-Os DAGs podem ser visualizados e executados através da interface web do Airflow. Os DAGs disponíveis são:
+A orquestração de dados é feita por 4 DAGs principais, executáveis pela interface do Airflow:
 
-* **dag\_gerar\_dados.py**: Geração e ingestão de dados.
-* **dag\_vendas\_ano\_mes.py**: Processamento de vendas por ano e mês.
-* **dag\_vendas\_estado.py**: Processamento de vendas por estado.
-* **dag\_vendas\_modalidade.py**: Processamento de vendas por modalidade.
+* **dag\_carregar\_dados.py**: Carga de dados dos arquivos CSV para PostgreSQL.
+* **dag\_extrair\_dados.py**: Extração dos dados do MongoDB Atlas para arquivo JSON.
+* **dag\_gerar\_dados.py**: Geração de dados para o MongoDB Atlas.
+* **dag\_transformar\_dados.py**: Transformação dos dados do arquivo JSON para arquivos CSV.
 
 ### 5. **Interagir com o painel Streamlit**
 
