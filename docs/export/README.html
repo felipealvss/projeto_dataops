@@ -3,7 +3,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       
-      <link rel="stylesheet" href="file:////home/felipe/.vscode/extensions/shd101wyy.markdown-preview-enhanced-0.8.18/crossnote/dependencies/katex/katex.min.css">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css">
       
       
       
@@ -25,6 +25,7 @@
       <div class="crossnote markdown-preview  ">
       
 <h1 id="-projeto-dataops-unifor">🚀 <strong>Projeto DataOps Unifor</strong> </h1>
+<p><img src="https://img.shields.io/badge/Docker-blue" alt="Docker"> <img src="https://img.shields.io/badge/Airflow-2.10.5-blue" alt="Airflow"> <img src="https://img.shields.io/badge/MongoDB-Atlas-green" alt="MongoDB"> <img src="https://img.shields.io/badge/Poetry-1.7.1-yellow" alt="Poetry"> <img src="https://img.shields.io/badge/PostgreSQL-13-blue" alt="PostgreSQL"> <img src="https://img.shields.io/badge/FastAPI-uvicorn-teal" alt="FastAPI"> <img src="https://img.shields.io/badge/Streamlit-1.34.0-red" alt="Streamlit"></p>
 <p>O <strong>Projeto DataOps Unifor</strong> é um projeto de engenharia de dados que orquestra pipelines de dados, realiza transformações de forma sequencial e oferece visualizações dinâmicas e interativas. O projeto integra várias tecnologias para criar um fluxo de trabalho completo e automatizado de dados.</p>
 <h2 id="-objetivo-do-projeto">🎯 <strong>Objetivo do Projeto</strong> </h2>
 <p>De forma geral, o objetivo principal é automatizar o fluxo de dados através de pipelines orquestrados pelo <strong>Apache Airflow</strong> e utilizando containers <strong>Docker</strong> para isolar os serviços e garantir escalabilidade e eficiência. A solução final inclui:</p>
@@ -60,10 +61,13 @@
 <pre data-role="codeBlock" data-info="plaintext" class="language-plaintext plaintext"><code>.
 ├── config                       # Arquivos de configuração do Airflow
 ├── dags                         # DAGs do Airflow para orquestração
-│   ├── dag_gerar_dados.py       # Geração de dados
-│   ├── dag_vendas_ano_mes.py    # Processamento de vendas por ano e mês
-│   ├── dag_vendas_estado.py     # Processamento de vendas por estado
-│   └── dag_vendas_modalidade.py # Processamento de vendas por modalidade
+│   ├── dag_carregar_dados.py    # Carga de dados dos arquivos CSV para PostgreSQL
+│   ├── dag_extrair_dados.py     # Extração dos dados do MongoDB Atlas para arquivo JSON
+│   ├── dag_gerar_dados.py       # Geração de dados para o MongoDB Atlas
+│   └── dag_transformar_dados.py # Transformação dos dados do arquivo JSON para arquivos CSV
+├── data                         # Diretório de armazenamento de dados locais
+│   ├── extract                  # Diretório que armazena dados do MongoDB Atlas para arquivo JSON
+│   └── transform                # Diretório que armazena dados do arquivo JSON para arquivos CSV
 ├── dataops_unifor               # Módulo principal
 ├── docker                       # Configurações Docker para FastAPI e Streamlit
 ├── docs                         # Documentação adicional
@@ -71,6 +75,7 @@
 ├── plugins                      # Plugins customizados do Airflow
 ├── src                          # Código-fonte do projeto
 │   ├── fastapi_app              # Aplicação FastAPI
+│   ├── python                   # Scripts de transformação, extração e carga usados pelas DAGs
 │   └── streamlit_dashboard      # Dashboard Streamlit
 └── tests                        # Testes do projeto
 └── .env                         # Configurações de variáveis de ambiente
@@ -104,12 +109,12 @@ poetry <span class="token function">install</span> --no-root
 <li><strong>Streamlit</strong>: <a href="http://localhost:8501">http://localhost:8501</a></li>
 </ul>
 <h3 id="4-executar-os-dags">4. <strong>Executar os DAGs</strong> </h3>
-<p>Os DAGs podem ser visualizados e executados através da interface web do Airflow. Os DAGs disponíveis são:</p>
+<p>A orquestração de dados é feita por 4 DAGs principais, executáveis pela interface do Airflow:</p>
 <ul>
-<li><strong>dag_gerar_dados.py</strong>: Geração e ingestão de dados.</li>
-<li><strong>dag_vendas_ano_mes.py</strong>: Processamento de vendas por ano e mês.</li>
-<li><strong>dag_vendas_estado.py</strong>: Processamento de vendas por estado.</li>
-<li><strong>dag_vendas_modalidade.py</strong>: Processamento de vendas por modalidade.</li>
+<li><strong>dag_carregar_dados.py</strong>: Carga de dados dos arquivos CSV para PostgreSQL.</li>
+<li><strong>dag_extrair_dados.py</strong>: Extração dos dados do MongoDB Atlas para arquivo JSON.</li>
+<li><strong>dag_gerar_dados.py</strong>: Geração de dados para o MongoDB Atlas.</li>
+<li><strong>dag_transformar_dados.py</strong>: Transformação dos dados do arquivo JSON para arquivos CSV.</li>
 </ul>
 <h3 id="5-interagir-com-o-painel-streamlit">5. <strong>Interagir com o painel Streamlit</strong> </h3>
 <p>O painel Streamlit possui 3 botões que interagem diretamente com as rotas disponíveis da API:</p>
